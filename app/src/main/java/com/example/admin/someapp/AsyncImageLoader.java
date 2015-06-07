@@ -1,12 +1,9 @@
 package com.example.admin.someapp;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.util.DisplayMetrics;
-import android.view.Display;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -18,7 +15,8 @@ public class AsyncImageLoader extends AsyncTask<Void, Void, Bitmap> {
     private ImageView imageView;
     private int imageResId;
     private Bitmap bmp;
-    private int sampleSize;
+    public static final int REQ_WIDTH = 500;
+    public static final int REQ_HEIGHT = 300;
 
     public AsyncImageLoader(Context context, ImageView imageView, int imageResId, Bitmap bmp){
         this.context = context;
@@ -56,26 +54,31 @@ public class AsyncImageLoader extends AsyncTask<Void, Void, Bitmap> {
 
     private Bitmap decodeAndScale(Bitmap bmp){
         BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inSampleSize = setSampleSize();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(context.getResources(), imageResId, options);
 
+        options.inSampleSize = calculateInSampleSize(options, REQ_WIDTH, REQ_HEIGHT);
+
+        options.inJustDecodeBounds = false;
         return BitmapFactory.decodeResource(context.getResources(), imageResId, options);
     }
 
-    private int setSampleSize(){
-        if(getScreenWidth((Activity)context ) >= 320){
-            sampleSize = 2;
+    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight){
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            //Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            //height and width larger than requested height and width
+            while((halfHeight / inSampleSize) > reqHeight && (halfWidth / inSampleSize) > reqWidth){
+                inSampleSize *= 2;
+            }
         }
-        return sampleSize;
-    }
 
-    public static int getScreenWidth(Activity activity){
-        Display display = activity.getWindowManager().getDefaultDisplay();
-        DisplayMetrics outMetrics = new DisplayMetrics();
-        display.getMetrics(outMetrics);
-
-        float density = activity.getResources().getDisplayMetrics().density;
-        float dpWidth = outMetrics.widthPixels / density;
-
-        return (int)dpWidth;
+        return inSampleSize;
     }
 }
