@@ -21,6 +21,10 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         mRecyclerView = (RecyclerView)findViewById(R.id.list);
+
+        //only if content do not change the layout size of RecyclerView
+        mRecyclerView.setHasFixedSize(true);
+
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
