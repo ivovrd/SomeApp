@@ -1,6 +1,7 @@
 package com.example.admin.someapp;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.ViewHold
     private List<Country> countries;
     private int rowLayout;
     private Context mContext;
+    private Bitmap bmp;
 
     public CountryAdapter(List<Country> countries, int rowLayout, Context mContext){
         this.countries = countries;
@@ -36,8 +38,13 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.ViewHold
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Country country = countries.get(position);
+
+        //holder.countryName.setText(country.name);
+        //holder.countryImage.setImageDrawable(mContext.getDrawable(country.getImageResourceId(mContext)));
+
+        holder.mImageLoader = new AsyncImageLoader(mContext, holder.countryImage, country.getImageResourceId(mContext), bmp);
+        holder.mImageLoader.execute();
         holder.countryName.setText(country.name);
-        holder.countryImage.setImageDrawable(mContext.getDrawable(country.getImageResourceId(mContext)));
     }
 
     @Override
@@ -48,6 +55,7 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.ViewHold
     public static class ViewHolder extends RecyclerView.ViewHolder{
         public TextView countryName;
         public ImageView countryImage;
+        public AsyncImageLoader mImageLoader;
 
         public ViewHolder(View itemView) {
             super(itemView);
