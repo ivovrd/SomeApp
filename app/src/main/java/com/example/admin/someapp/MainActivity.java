@@ -40,7 +40,7 @@ public class MainActivity extends Activity {
         //Only if content do not change the layout size of RecyclerView
         mRecyclerView.setHasFixedSize(true);
 
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setLayoutManager(new PreCachingLayoutManager(this));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
         mAdapter = new CountryAdapter(CountryManager.getInstance().getCountries(), R.layout.item_view, this, mMemoryCache);

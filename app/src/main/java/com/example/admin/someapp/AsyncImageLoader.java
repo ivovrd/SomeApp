@@ -18,7 +18,7 @@ public class AsyncImageLoader extends AsyncTask<Void, Void, Bitmap> {
     private Bitmap bmp;
     private LruCache<String, Bitmap> mMemoryCache;
     public static final int REQ_WIDTH = 500;
-    public static final int REQ_HEIGHT = 300;
+    public static final int REQ_HEIGHT = 200;
 
     public AsyncImageLoader(Context context, ImageView imageView, int imageResId, Bitmap bmp, LruCache<String, Bitmap> mMemoryCache){
         this.context = context;
@@ -43,6 +43,8 @@ public class AsyncImageLoader extends AsyncTask<Void, Void, Bitmap> {
         }
         return null;
     }
+
+
 
     @Override
     protected void onPostExecute(Bitmap bitmap) {

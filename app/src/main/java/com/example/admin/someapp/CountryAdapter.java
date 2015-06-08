@@ -69,14 +69,4 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.ViewHold
             countryImage = (ImageView)itemView.findViewById(R.id.countryImage);
         }
     }
-
-    /*public void addBitmapToMemoryCache(String key, Bitmap bmp){
-        if(getBitmapFromMemoryCache(key) == null){
-            mMemoryCache.put(key, bmp);
-        }
-    }
-
-    public Bitmap getBitmapFromMemoryCache(String key){
-        return mMemoryCache.get(key);
-    }*/
 }
