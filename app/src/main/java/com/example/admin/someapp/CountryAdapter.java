@@ -3,6 +3,7 @@ package com.example.admin.someapp;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
+import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,11 +23,13 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.ViewHold
     private int rowLayout;
     private Context mContext;
     private Bitmap bmp;
+    private LruCache<String, Bitmap> mMemoryCache;
 
-    public CountryAdapter(List<Country> countries, int rowLayout, Context mContext){
+    public CountryAdapter(List<Country> countries, int rowLayout, Context mContext, LruCache<String, Bitmap> mMemoryCache){
         this.countries = countries;
         this.rowLayout = rowLayout;
         this.mContext = mContext;
+        this.mMemoryCache = mMemoryCache;
     }
 
     @Override
@@ -39,11 +42,14 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.ViewHold
     public void onBindViewHolder(ViewHolder holder, int position) {
         Country country = countries.get(position);
 
-        //holder.countryName.setText(country.name);
-        //holder.countryImage.setImageDrawable(mContext.getDrawable(country.getImageResourceId(mContext)));
-
-        holder.mImageLoader = new AsyncImageLoader(mContext, holder.countryImage, country.getImageResourceId(mContext), bmp);
-        holder.mImageLoader.execute();
+        final String imageKey = String.valueOf(country.getImageResourceId(mContext));
+        final Bitmap bitmap = mMemoryCache.get(imageKey);
+        if(bitmap != null){
+            holder.countryImage.setImageBitmap(bitmap);
+        }else {
+            holder.mImageLoader = new AsyncImageLoader(mContext, holder.countryImage, country.getImageResourceId(mContext), bmp, mMemoryCache);
+            holder.mImageLoader.execute();
+        }
         holder.countryName.setText(country.name);
     }
 
@@ -63,4 +69,14 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.ViewHold
             countryImage = (ImageView)itemView.findViewById(R.id.countryImage);
         }
     }
+
+    /*public void addBitmapToMemoryCache(String key, Bitmap bmp){
+        if(getBitmapFromMemoryCache(key) == null){
+            mMemoryCache.put(key, bmp);
+        }
+    }
+
+    public Bitmap getBitmapFromMemoryCache(String key){
+        return mMemoryCache.get(key);
+    }*/
 }

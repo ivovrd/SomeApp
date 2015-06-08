@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.util.LruCache;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -15,14 +16,16 @@ public class AsyncImageLoader extends AsyncTask<Void, Void, Bitmap> {
     private ImageView imageView;
     private int imageResId;
     private Bitmap bmp;
+    private LruCache<String, Bitmap> mMemoryCache;
     public static final int REQ_WIDTH = 500;
     public static final int REQ_HEIGHT = 300;
 
-    public AsyncImageLoader(Context context, ImageView imageView, int imageResId, Bitmap bmp){
+    public AsyncImageLoader(Context context, ImageView imageView, int imageResId, Bitmap bmp, LruCache<String, Bitmap> mMemoryCache){
         this.context = context;
         this.imageView = imageView;
         this.imageResId = imageResId;
         this.bmp = bmp;
+        this.mMemoryCache = mMemoryCache;
     }
 
     @Override
@@ -60,7 +63,11 @@ public class AsyncImageLoader extends AsyncTask<Void, Void, Bitmap> {
         options.inSampleSize = calculateInSampleSize(options, REQ_WIDTH, REQ_HEIGHT);
 
         options.inJustDecodeBounds = false;
-        return BitmapFactory.decodeResource(context.getResources(), imageResId, options);
+        final Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), imageResId, options);
+        if(mMemoryCache.get(String.valueOf(imageResId)) == null){
+            mMemoryCache.put(String.valueOf(imageResId), bitmap);
+        }
+        return  bitmap;
     }
 
     public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight){
