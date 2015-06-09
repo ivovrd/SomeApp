@@ -1,10 +1,8 @@
 package com.example.admin.someapp;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.os.Bundle;
 import android.util.LruCache;
@@ -14,7 +12,7 @@ import android.view.MenuItem;
 import com.example.admin.someapp.model.CountryManager;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private CountryAdapter mAdapter;
     public LruCache<String, Bitmap> mMemoryCache;
