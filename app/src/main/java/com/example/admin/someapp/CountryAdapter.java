@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.admin.someapp.model.Country;
@@ -24,6 +25,7 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.ViewHold
     private Context mContext;
     private Bitmap bmp;
     private LruCache<String, Bitmap> mMemoryCache;
+    private ProgressBar progBar;
 
     public CountryAdapter(List<Country> countries, int rowLayout, Context mContext, LruCache<String, Bitmap> mMemoryCache){
         this.countries = countries;
@@ -47,10 +49,9 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.ViewHold
         if(bitmap != null){
             holder.countryImage.setImageBitmap(bitmap);
         }else {
-            holder.mImageLoader = new AsyncImageLoader(mContext, holder.countryImage, country.getImageResourceId(mContext), bmp, mMemoryCache);
+            holder.mImageLoader = new AsyncImageLoader(mContext, holder, country.name, country.getImageResourceId(mContext), bmp, mMemoryCache);
             holder.mImageLoader.execute();
         }
-        holder.countryName.setText(country.name);
     }
 
     @Override
@@ -61,12 +62,14 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.ViewHold
     public static class ViewHolder extends RecyclerView.ViewHolder{
         public TextView countryName;
         public ImageView countryImage;
+        public ProgressBar progressBar;
         public AsyncImageLoader mImageLoader;
 
         public ViewHolder(View itemView) {
             super(itemView);
             countryName = (TextView)itemView.findViewById(R.id.countryName);
             countryImage = (ImageView)itemView.findViewById(R.id.countryImage);
+            progressBar = (ProgressBar)itemView.findViewById(R.id.progress_bar);
         }
     }
 }

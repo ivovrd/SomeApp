@@ -6,36 +6,42 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.LruCache;
 import android.view.View;
-import android.widget.ImageView;
+
 
 /**
  * Created by Ivo on 7.6.2015..
  */
 public class AsyncImageLoader extends AsyncTask<Void, Void, Bitmap> {
     private Context context;
-    private ImageView imageView;
+    private CountryAdapter.ViewHolder viewHolder;
+    private String countryName;
     private int imageResId;
     private Bitmap bmp;
     private LruCache<String, Bitmap> mMemoryCache;
     public static final int REQ_WIDTH = 500;
     public static final int REQ_HEIGHT = 200;
 
-    public AsyncImageLoader(Context context, ImageView imageView, int imageResId, Bitmap bmp, LruCache<String, Bitmap> mMemoryCache){
+    public AsyncImageLoader(Context context, CountryAdapter.ViewHolder viewHolder,String countryName, int imageResId, Bitmap bmp, LruCache<String, Bitmap> mMemoryCache){
         this.context = context;
-        this.imageView = imageView;
         this.imageResId = imageResId;
         this.bmp = bmp;
         this.mMemoryCache = mMemoryCache;
+        this.viewHolder = viewHolder;
+        this.countryName = countryName;
     }
 
     @Override
     protected void onPreExecute() {
-        imageView.setVisibility(View.GONE);
+
+        viewHolder.countryImage.setVisibility(View.GONE);
+        viewHolder.progressBar.setVisibility(View.VISIBLE);
+
         super.onPreExecute();
     }
 
     @Override
     protected Bitmap doInBackground(Void... params) {
+
         try{
             return decodeAndScale(bmp);
         }catch(Exception e){
@@ -44,15 +50,15 @@ public class AsyncImageLoader extends AsyncTask<Void, Void, Bitmap> {
         return null;
     }
 
-
-
     @Override
     protected void onPostExecute(Bitmap bitmap) {
-        imageView.setVisibility(View.VISIBLE);
+        viewHolder.progressBar.setVisibility(View.GONE);
+        viewHolder.countryImage.setVisibility(View.VISIBLE);
         try{
-            imageView.setImageBitmap(bitmap);
+            viewHolder.countryImage.setImageBitmap(bitmap);
+            viewHolder.countryName.setText(countryName);
         }catch(Exception e){
-            imageView.setImageResource(R.mipmap.ic_launcher);
+            viewHolder.countryImage.setImageResource(R.mipmap.ic_launcher);
         }
         super.onPostExecute(bitmap);
     }
