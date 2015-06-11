@@ -4,6 +4,6 @@
     <color name="primary_dark">#E64A19</color>
     <color name="accent">#FF5722</color>
     <color name="text_primary">#d9ffffff</color>
-    <color name="text_secondary">#D9000000</color>
+    <color name="text_secondary">#d9ffffff</color>
     <color name="photo_tint">#88101010</color>
 </resources>

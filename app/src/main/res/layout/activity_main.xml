@@ -17,6 +17,7 @@
         />
 
     <android.support.design.widget.FloatingActionButton
+        android:id="@+id/myFAButton"
         android:src="@mipmap/ic_add_white"
         app:fabSize="normal"
         android:layout_height="wrap_content"
