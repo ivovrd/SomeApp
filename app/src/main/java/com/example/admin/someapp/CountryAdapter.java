@@ -25,7 +25,6 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.ViewHold
     private Context mContext;
     private Bitmap bmp;
     private LruCache<String, Bitmap> mMemoryCache;
-    private ProgressBar progBar;
 
     public CountryAdapter(List<Country> countries, int rowLayout, Context mContext, LruCache<String, Bitmap> mMemoryCache){
         this.countries = countries;
@@ -48,6 +47,7 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.ViewHold
         final Bitmap bitmap = mMemoryCache.get(imageKey);
         if(bitmap != null){
             holder.countryImage.setImageBitmap(bitmap);
+            holder.countryName.setText(country.name);
         }else {
             holder.mImageLoader = new AsyncImageLoader(mContext, holder, country.name, country.getImageResourceId(mContext), bmp, mMemoryCache);
             holder.mImageLoader.execute();
@@ -59,7 +59,7 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.ViewHold
         return countries == null ? 0 : countries.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder{
         public TextView countryName;
         public ImageView countryImage;
         public ProgressBar progressBar;
