@@ -33,6 +33,11 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.ViewHold
         this.mMemoryCache = mMemoryCache;
     }
 
+    public void delete(int position){
+        countries.remove(position);
+        notifyItemRemoved(position);
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(rowLayout, parent, false);
@@ -59,7 +64,7 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.ViewHold
         return countries == null ? 0 : countries.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public TextView countryName;
         public ImageView countryImage;
         public ProgressBar progressBar;
@@ -70,6 +75,12 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.ViewHold
             countryName = (TextView)itemView.findViewById(R.id.countryName);
             countryImage = (ImageView)itemView.findViewById(R.id.countryImage);
             progressBar = (ProgressBar)itemView.findViewById(R.id.progress_bar);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            delete(getAdapterPosition());
         }
     }
 }
