@@ -3,10 +3,7 @@ package com.example.admin.someapp.model;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Trey Robinson on 8/3/14.
- * Copyright 2014 MindMine LLC.
- */
+
 public class CountryManager {
 
     private static String[] countryArray = {"Australia", "China","Croatia","Germany", "Italy", "Japan", "Russia", "Spain", "United Kingdom", "United States"};
@@ -41,5 +38,4 @@ public class CountryManager {
 
         return  countries;
     }
-
 }

@@ -6,10 +6,12 @@ import android.support.v7.widget.RecyclerView;
 import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewDebug;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.admin.someapp.model.Country;
 
@@ -36,7 +38,13 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.ViewHold
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(rowLayout, parent, false);
-        return new ViewHolder(view);
+        return new ViewHolder(view, new CountryAdapter.ViewHolder.MyClickListener() {
+            @Override
+            public void itemClicked(View view, int position) {
+                countries.remove(position);
+                notifyItemRemoved(position);
+            }
+        });
     }
 
     @Override
@@ -59,17 +67,32 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.ViewHold
         return countries == null ? 0 : countries.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public TextView countryName;
         public ImageView countryImage;
         public ProgressBar progressBar;
         public AsyncImageLoader mImageLoader;
+        public MyClickListener myClickListener;
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(View itemView, MyClickListener clickListener) {
             super(itemView);
+
+            this.myClickListener = clickListener;
             countryName = (TextView)itemView.findViewById(R.id.countryName);
             countryImage = (ImageView)itemView.findViewById(R.id.countryImage);
             progressBar = (ProgressBar)itemView.findViewById(R.id.progress_bar);
+
+            countryName.setOnClickListener(this);
+            //itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            myClickListener.itemClicked(v, getAdapterPosition());
+        }
+
+        public interface MyClickListener{
+            void itemClicked(View view, int position);
         }
     }
 }

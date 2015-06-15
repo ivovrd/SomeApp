@@ -2,10 +2,7 @@ package com.example.admin.someapp.model;
 
 import android.content.Context;
 
-/**
- * Created by Trey Robinson on 8/3/14.
- * Copyright 2014 MindMine LLC.
- */
+
 public class Country {
 
     public String name;
