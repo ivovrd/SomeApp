@@ -17,9 +17,7 @@ import com.example.admin.someapp.model.Country;
 
 import java.util.List;
 
-/**
- * Created by ADMIN on 5.6.2015..
- */
+
 public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.ViewHolder>{
 
     private List<Country> countries;

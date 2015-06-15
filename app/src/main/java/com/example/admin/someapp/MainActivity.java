@@ -11,7 +11,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.support.design.widget.FloatingActionButton;
 import android.view.View;
-import android.widget.TextView;
 
 import com.example.admin.someapp.model.CountryManager;
 
